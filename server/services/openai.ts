@@ -63,7 +63,7 @@ export async function generateChatResponse(message: string, messageHistory: any[
         const fetchResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+            'Authorization': `Bearer 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 `,
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
