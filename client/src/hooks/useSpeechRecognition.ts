@@ -13,6 +13,7 @@ interface UseSpeechRecognitionReturn {
   stopListening: () => void;
   hasRecognitionSupport: boolean;
   resetTranscript: () => void;
+  error: string | null;
 }
 
 // Define a type for the Web Speech API's SpeechRecognition
@@ -74,6 +75,7 @@ export const useSpeechRecognition = (
 ): UseSpeechRecognitionReturn => {
   const [transcript, setTranscript] = useState<string>("");
   const [isListening, setIsListening] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Check if speech recognition is supported
   const SpeechRecognition = getSpeechRecognition();
@@ -131,12 +133,34 @@ export const useSpeechRecognition = (
     recognition.onerror = (event) => {
       console.error("Speech recognition error", event);
       setIsListening(false);
+
+      // Handle specific error types
+      switch (event.error) {
+        case "network":
+          setError(
+            "Network error: Please check your internet connection and try again."
+          );
+          break;
+        case "not-allowed":
+          setError(
+            "Microphone access denied: Please allow microphone access in your browser settings."
+          );
+          break;
+        case "service-not-allowed":
+          setError(
+            "Speech recognition service not allowed: Please check your browser settings."
+          );
+          break;
+        default:
+          setError(`Speech recognition error: ${event.error}`);
+      }
     };
 
     // Start recognition
     try {
       recognition.start();
       setIsListening(true);
+      setError(null); // Clear any previous errors when starting
 
       // Handle auto-termination by restarting if needed
       const keepAliveHandler = () => {
@@ -186,6 +210,7 @@ export const useSpeechRecognition = (
     stopListening,
     hasRecognitionSupport,
     resetTranscript,
+    error,
   };
 };
 
