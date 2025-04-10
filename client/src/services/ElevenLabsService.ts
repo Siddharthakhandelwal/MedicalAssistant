@@ -51,7 +51,8 @@ class ElevenLabsService {
 
   constructor() {
     // Access environment variables in Vite with import.meta.env
-    this.apiKey = import.meta.env.ELEVEN_LABS_API_KEY || '';
+    // this.apiKey = import.meta.env.ELEVEN_LABS_API_KEY || '';
+    this.apiKey ='sk_82f1bdce6783acdcc746d43715e762ed8183980dbc015af0';
     
     console.log('Eleven Labs service initialized. API key available:', !!this.apiKey);
     
